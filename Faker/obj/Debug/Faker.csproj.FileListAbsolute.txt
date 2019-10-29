@@ -1,0 +1,7 @@
+C:\!Work!\3 КУРС\5 СЕМ\СПП\Faker\Faker\bin\Debug\Faker.exe.config
+C:\!Work!\3 КУРС\5 СЕМ\СПП\Faker\Faker\bin\Debug\Faker.exe
+C:\!Work!\3 КУРС\5 СЕМ\СПП\Faker\Faker\bin\Debug\Faker.pdb
+C:\!Work!\3 КУРС\5 СЕМ\СПП\Faker\Faker\obj\Debug\Faker.csprojAssemblyReference.cache
+C:\!Work!\3 КУРС\5 СЕМ\СПП\Faker\Faker\obj\Debug\Faker.csproj.CoreCompileInputs.cache
+C:\!Work!\3 КУРС\5 СЕМ\СПП\Faker\Faker\obj\Debug\Faker.exe
+C:\!Work!\3 КУРС\5 СЕМ\СПП\Faker\Faker\obj\Debug\Faker.pdb
