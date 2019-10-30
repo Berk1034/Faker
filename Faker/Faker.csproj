@@ -47,11 +47,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoolGenerator.cs" />
+    <Compile Include="CharGenerator.cs" />
+    <Compile Include="DateTimeGenerator.cs" />
+    <Compile Include="DoubleGenerator.cs" />
     <Compile Include="Faker.cs" />
+    <Compile Include="IListGenerator.cs" />
     <Compile Include="IntGenerator.cs" />
+    <Compile Include="ListGenerator.cs" />
+    <Compile Include="LongGenerator.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
