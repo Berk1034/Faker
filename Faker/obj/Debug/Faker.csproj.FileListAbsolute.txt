@@ -5,3 +5,6 @@ C:\!Work!\3 КУРС\5 СЕМ\СПП\Faker\Faker\obj\Debug\Faker.csprojAssemblyR
 C:\!Work!\3 КУРС\5 СЕМ\СПП\Faker\Faker\obj\Debug\Faker.csproj.CoreCompileInputs.cache
 C:\!Work!\3 КУРС\5 СЕМ\СПП\Faker\Faker\obj\Debug\Faker.exe
 C:\!Work!\3 КУРС\5 СЕМ\СПП\Faker\Faker\obj\Debug\Faker.pdb
+C:\!Work!\3 КУРС\5 СЕМ\СПП\Faker\Faker\bin\Debug\IGeneratorLibrary.dll
+C:\!Work!\3 КУРС\5 СЕМ\СПП\Faker\Faker\bin\Debug\IGeneratorLibrary.pdb
+C:\!Work!\3 КУРС\5 СЕМ\СПП\Faker\Faker\obj\Debug\Faker.csproj.CopyComplete

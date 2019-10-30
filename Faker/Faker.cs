@@ -3,28 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
+using IGeneratorLibrary;
+using System.IO;
 
 namespace Faker
 {
     public class Faker
     {
+        public Dictionary<Type, IGenerator> Generators = new Dictionary<Type, IGenerator>();
+        public Stack<Type> generationStack;
+
+        public Faker()
+        {
+            List<Assembly> Plugins = Plugin.LoadPlugin(Path.GetDirectoryName(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName) + Plugin.path + "ByteGenerator.dll");
+            Generators = Plugin.GetGenerators(Plugins);
+            Generators.Add(typeof(int), new IntGenerator());
+            Generators.Add(typeof(bool), new BoolGenerator());
+        }
+
         public T Create<T>()
         {
-            if (typeof(T) == typeof(int)){
-                IntGenerator intgen = new IntGenerator();
-                int test = intgen.Generate();
-                return (T)(object)test;
+            foreach(KeyValuePair<Type, IGenerator> generator in Generators){
+                if (generator.Key == typeof(T))
+                    return (T)generator.Value.Generate();
             }
-            if (typeof(T) == typeof(bool))
-            {
-                BoolGenerator boolgen = new BoolGenerator();
-                bool test = boolgen.Generate();
-                return (T)(object)test;
-            }
-            else
-            {
-                return default(T);
-            }
+            return default(T);
         }
     }
 }

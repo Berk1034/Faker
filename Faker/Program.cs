@@ -13,7 +13,8 @@ namespace Faker
             Faker faker = new Faker();
             int t = faker.Create<int>();
             bool b = faker.Create<bool>();
-            Console.WriteLine("{0}, {1}", t, b);
+            byte c = faker.Create<byte>();
+            Console.WriteLine("{0}, {1}, {2}", t, b, c);
             Console.ReadLine();
         }
     }
