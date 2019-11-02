@@ -12,7 +12,7 @@ namespace Faker
     public class Faker
     {
         public Dictionary<Type, IGenerator> Generators = new Dictionary<Type, IGenerator>();
-        public Stack<Type> generationStack;
+        public Stack<Type> generationStack = new Stack<Type>();
         public ListGenerator listGenerator;
 
         public Faker()
@@ -32,6 +32,10 @@ namespace Faker
         public T Create<T>()
         {
             Type type = typeof(T);
+            if (generationStack.Contains(type))
+            {
+                return default(T);
+            }
             if(type.IsAbstract || type.IsInterface || type == typeof(void))
             {
                 return default(T);
@@ -48,9 +52,20 @@ namespace Faker
             }
             if (!type.IsAbstract || !type.IsPrimitive)
             {
+                generationStack.Push(type);
                 ConstructorInfo ConstructorWithMaxArgs = GetConstructorWithMaxParams(type);
-                var instance = GenerateObjectFromConstructor(ConstructorWithMaxArgs);
-                return (T)GenerateFieldsAndProperties(type, instance);
+                if(ConstructorWithMaxArgs != null)
+                {
+                    var instance = GenerateObjectFromConstructor(ConstructorWithMaxArgs);
+                    instance = (T)GenerateFieldsAndProperties(type, instance);
+                    generationStack.Pop();
+                    return (T)instance;
+                }
+                else
+                {
+                    generationStack.Pop();
+                    return default(T);
+                }
             }
             return default(T);
         }
@@ -87,7 +102,6 @@ namespace Faker
                     parametersValues[i] = valueGenerator.Generate();
                 }
             }
-            
             return constructor.Invoke(parametersValues);
         }
 
@@ -96,16 +110,18 @@ namespace Faker
             FieldInfo[] fields = type.GetFields();
             foreach(FieldInfo field in fields)
             {
-                IGenerator value;
-                Generators.TryGetValue(field.FieldType, out value);
-                field.SetValue(instance, value.Generate());
+                MethodInfo method = typeof(Faker).GetMethod("Create");
+                MethodInfo genericMethod = method.MakeGenericMethod(field.FieldType);
+                object value = genericMethod.Invoke(this, null);
+                field.SetValue(instance, value);
             }
             PropertyInfo[] properties = type.GetProperties();
             foreach(PropertyInfo property in properties)
             {
-                IGenerator value;
-                Generators.TryGetValue(property.PropertyType, out value);
-                property.SetValue(instance, value.Generate());
+                MethodInfo method = typeof(Faker).GetMethod("Create");
+                MethodInfo genericMethod = method.MakeGenericMethod(property.PropertyType);
+                object value = genericMethod.Invoke(this, null);
+                property.SetValue(instance, value);
             }
             return instance;
         }

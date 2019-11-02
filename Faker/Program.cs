@@ -26,10 +26,10 @@ namespace Faker
 
     public class D
     {
-        int a;
-        int b;
-        bool c;
-        List<bool> BoolList;
+        public int a;
+        public int b;
+        public bool c;
+        private List<bool> BoolList;
         public char k;
         public string Name { get; set; }
 
@@ -49,6 +49,26 @@ namespace Faker
         {
             a = e;
             b = k;
+        }
+    }
+
+    public class Foo
+    {
+        int k;
+        public InsideTheFoo inside { get; set; }
+        public Foo(int a)
+        {
+            this.k = a;
+        }
+    }
+
+    public class InsideTheFoo
+    {
+        int c;
+        public Foo foo { get; set; }
+        public InsideTheFoo(int k)
+        {
+            this.c = k;
         }
     }
 
@@ -75,6 +95,7 @@ namespace Faker
             }
             Enum en = faker.Create<Enum>();
             D classtest = faker.Create<D>();
+            Foo testrecursion = faker.Create<Foo>();
             Console.ReadLine();
         }
     }
