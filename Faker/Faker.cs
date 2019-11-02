@@ -49,7 +49,8 @@ namespace Faker
             if (!type.IsAbstract || !type.IsPrimitive)
             {
                 ConstructorInfo ConstructorWithMaxArgs = GetConstructorWithMaxParams(type);
-                return (T)GenerateObjectFromConstructor(ConstructorWithMaxArgs);
+                var instance = GenerateObjectFromConstructor(ConstructorWithMaxArgs);
+                return (T)GenerateFieldsAndProperties(type, instance);
             }
             return default(T);
         }
@@ -88,6 +89,25 @@ namespace Faker
             }
             
             return constructor.Invoke(parametersValues);
+        }
+
+        private object GenerateFieldsAndProperties(Type type, object instance)
+        {
+            FieldInfo[] fields = type.GetFields();
+            foreach(FieldInfo field in fields)
+            {
+                IGenerator value;
+                Generators.TryGetValue(field.FieldType, out value);
+                field.SetValue(instance, value.Generate());
+            }
+            PropertyInfo[] properties = type.GetProperties();
+            foreach(PropertyInfo property in properties)
+            {
+                IGenerator value;
+                Generators.TryGetValue(property.PropertyType, out value);
+                property.SetValue(instance, value.Generate());
+            }
+            return instance;
         }
     }
 }

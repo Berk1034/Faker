@@ -30,12 +30,15 @@ namespace Faker
         int b;
         bool c;
         List<bool> BoolList;
+        public char k;
+        public string Name { get; set; }
+
         public D()
         {
             a = 10;
             b = 2;
         }
-        private D(int a, int b, bool c, List<bool> listbool)
+        public D(int a, int b, bool c, List<bool> listbool)
         {
             this.a = a;
             this.b = b;
