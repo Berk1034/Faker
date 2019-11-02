@@ -46,16 +46,48 @@ namespace Faker
             {
                 return (T)value.Generate();
             }
-            else
+            if (!type.IsAbstract || !type.IsPrimitive)
             {
-                return default(T);
+                ConstructorInfo ConstructorWithMaxArgs = GetConstructorWithMaxParams(type);
+                return (T)GenerateObjectFromConstructor(ConstructorWithMaxArgs);
             }
-            /*
-            foreach(KeyValuePair<Type, IGenerator> generator in Generators){
-                if (generator.Key == typeof(T))
-                    return (T)generator.Value.Generate();
+            return default(T);
+        }
+
+        private ConstructorInfo GetConstructorWithMaxParams(Type type)
+        {
+            ConstructorInfo constructorwithmaxparams = null;
+            int count = 0;
+            foreach (ConstructorInfo constructor in type.GetConstructors())
+            {
+                if(count < constructor.GetParameters().Count())
+                {
+                    constructorwithmaxparams = constructor;
+                    count = constructor.GetParameters().Count();
+                }
             }
-            */
+            return constructorwithmaxparams;
+        }
+
+        private object GenerateObjectFromConstructor(ConstructorInfo constructor)
+        {
+            ParameterInfo[] parameters = constructor.GetParameters();
+            object[] parametersValues = new object[parameters.Length];
+            for(int i = 0; i < parameters.Length; i++)
+            {
+                if (parameters[i].ParameterType.IsGenericType)
+                {
+                    parametersValues[i] = listGenerator.Generate((Type)parameters[i].ParameterType.GenericTypeArguments.GetValue(0));
+                }
+                else
+                {
+                    IGenerator valueGenerator;
+                    Generators.TryGetValue(parameters[i].ParameterType, out valueGenerator);
+                    parametersValues[i] = valueGenerator.Generate();
+                }
+            }
+            
+            return constructor.Invoke(parametersValues);
         }
     }
 }
