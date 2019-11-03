@@ -127,10 +127,13 @@ namespace Faker
             PropertyInfo[] properties = type.GetProperties();
             foreach(PropertyInfo property in properties)
             {
-                MethodInfo method = typeof(Faker).GetMethod("Create");
-                MethodInfo genericMethod = method.MakeGenericMethod(property.PropertyType);
-                object value = genericMethod.Invoke(this, null);
-                property.SetValue(instance, value);
+                if (property.CanWrite)
+                {
+                    MethodInfo method = typeof(Faker).GetMethod("Create");
+                    MethodInfo genericMethod = method.MakeGenericMethod(property.PropertyType);
+                    object value = genericMethod.Invoke(this, null);
+                    property.SetValue(instance, value);
+                }
             }
             return instance;
         }

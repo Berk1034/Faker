@@ -83,6 +83,11 @@ namespace Faker
         }
     }
 
+    public class TestProperties
+    {
+        private string Name { get; }
+    }
+
     class Program
     {
         static void Main(string[] args)
@@ -110,6 +115,7 @@ namespace Faker
             A classwithnoconstructor = faker.Create<A>();
             B recursive = faker.Create<B>();
             PrivateConstructor pc = faker.Create<PrivateConstructor>();
+            TestProperties tp = faker.Create<TestProperties>();
             Console.ReadLine();
         }
     }
