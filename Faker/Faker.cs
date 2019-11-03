@@ -63,8 +63,17 @@ namespace Faker
                 }
                 else
                 {
-                    generationStack.Pop();
-                    return default(T);
+                    if (type.GetConstructors().Count() != 0)
+                    {
+                        var instance = Activator.CreateInstance(type);
+                        instance = (T)GenerateFieldsAndProperties(type, instance);
+                        generationStack.Pop();
+                        return (T)instance;
+                    }
+                    else
+                    {
+                        return default(T);
+                    }
                 }
             }
             return default(T);

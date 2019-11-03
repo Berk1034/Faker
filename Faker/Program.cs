@@ -72,6 +72,17 @@ namespace Faker
         }
     }
 
+    public class PrivateConstructor
+    {
+        int k;
+        int e;
+        private PrivateConstructor(int a, int b)
+        {
+            k = a;
+            e = b;
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
@@ -96,6 +107,9 @@ namespace Faker
             Enum en = faker.Create<Enum>();
             D classtest = faker.Create<D>();
             Foo testrecursion = faker.Create<Foo>();
+            A classwithnoconstructor = faker.Create<A>();
+            B recursive = faker.Create<B>();
+            PrivateConstructor pc = faker.Create<PrivateConstructor>();
             Console.ReadLine();
         }
     }
