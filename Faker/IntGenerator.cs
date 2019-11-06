@@ -9,9 +9,10 @@ namespace Faker
 {
     public class IntGenerator : IGenerator
     {
+        private Random rnd = new Random();
+
         public object Generate()
         {
-            Random rnd = new Random();
             return rnd.Next(2) == 0 ? rnd.Next(int.MinValue, -1) : rnd.Next(1, int.MaxValue);
         }
 

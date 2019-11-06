@@ -9,14 +9,14 @@ namespace Faker
 {
     public class BoolGenerator : IGenerator
     {
-        public Type GeneratedType()
-        {
-            return typeof(bool);
-        }
-
         public object Generate()
         {
             return true; //RETURN NOT 0 VALUES!   
+        }
+
+        public Type GeneratedType()
+        {
+            return typeof(bool);
         }
     }
 }

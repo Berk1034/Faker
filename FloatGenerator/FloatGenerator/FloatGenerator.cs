@@ -9,9 +9,10 @@ namespace FloatGenerator
 {
     public class FloatGenerator : IGenerator
     {
+        private Random rnd = new Random();
+
         public object Generate()
         {
-            Random rnd = new Random();
             int sign = rnd.Next(2);
             int exponent = rnd.Next((1 << 8) - 1);
             int mantissa = rnd.Next(1 << 23);

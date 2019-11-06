@@ -9,9 +9,10 @@ namespace FakerLibrary
 {
     public class CharGenerator : IGenerator
     {
+        private Random rnd = new Random();
+
         public object Generate()
         {
-            Random rnd = new Random();
             return (char)rnd.Next(0, 256);
         }
 

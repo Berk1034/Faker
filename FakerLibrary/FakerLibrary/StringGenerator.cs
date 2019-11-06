@@ -9,9 +9,10 @@ namespace FakerLibrary
 {
     public class StringGenerator : IGenerator
     {
+        private Random rnd = new Random();
+
         public object Generate()
         {
-            Random rnd = new Random();
             int length = rnd.Next(1, 23);
             string result = "";
             for (int i = 0; i < length; i++)

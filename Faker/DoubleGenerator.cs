@@ -9,9 +9,10 @@ namespace Faker
 {
     public class DoubleGenerator : IGenerator
     {
+        private Random rnd = new Random();
+
         public object Generate()
         {
-            Random rnd = new Random();
             return rnd.NextDouble();
         }
 

@@ -11,6 +11,7 @@ namespace FakerLibrary
     public class ListGenerator : IListGenerator
     {
         private Dictionary<Type, IGenerator> AvailableGenerators = new Dictionary<Type, IGenerator>();
+        private Random rnd = new Random();
 
         public ListGenerator(Dictionary<Type, IGenerator> Generators)
         {
@@ -20,7 +21,6 @@ namespace FakerLibrary
         public object Generate(Type listtype)
         {
             IList listinstance = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(listtype));
-            Random rnd = new Random();
             int listsize = rnd.Next(1, 21);
             for (int i = 0; i < listsize; i++)
             {

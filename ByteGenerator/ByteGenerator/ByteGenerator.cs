@@ -9,9 +9,10 @@ namespace ByteGenerator
 {
     public class ByteGenerator : IGenerator
     {
+        private Random rnd = new Random();
+
         public object Generate()
         {
-            Random rnd = new Random();
             return (byte)rnd.Next(1, byte.MaxValue);
         }
 
