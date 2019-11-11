@@ -74,6 +74,13 @@ namespace FakerUnitTests
         }
 
         [TestMethod]
+        public void ShouldAvoidUnsupportedType()
+        {
+            short s = faker.Create<short>();
+            Assert.AreEqual(default(short), s);
+        }
+
+        [TestMethod]
         public void ShouldFillListWithDifferentValues()
         {
             List<int> list = faker.Create<List<int>>();
@@ -117,6 +124,16 @@ namespace FakerUnitTests
             Assert.IsNotNull(differentConstructors);
             Assert.AreNotEqual(default(int), differentConstructors.a);
             Assert.AreNotEqual(default(bool), differentConstructors.b);
+            Assert.AreEqual("I am private", differentConstructors.publicstr);
+            Assert.AreEqual(default(float), differentConstructors.publicf);
+        }
+
+        [TestMethod]
+        public void ShouldFillListOfGenericType()
+        {
+            List<ListTest> lt = faker.Create<List<ListTest>>();
+            Assert.IsNotNull(lt);
+            
         }
     }
 }

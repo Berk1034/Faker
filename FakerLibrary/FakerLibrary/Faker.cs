@@ -26,29 +26,28 @@ namespace FakerLibrary
             Generators.Add(typeof(double), new DoubleGenerator());
             Generators.Add(typeof(long), new LongGenerator());
             Generators.Add(typeof(string), new StringGenerator());
-            listGenerator = new ListGenerator(Generators);
+            listGenerator = new ListGenerator(this);
         }
 
-        public T Create<T>()
+        public object Create(Type type)
         {
-            Type type = typeof(T);
             if (generationStack.Contains(type))
             {
-                return default(T);
+                return null;
             }
             if (type.IsAbstract || type.IsInterface || type == typeof(void))
             {
-                return default(T);
-            }
-            if (type.IsGenericType)
-            {
-                return (T)listGenerator.Generate((Type)type.GenericTypeArguments.GetValue(0));
+                return null;
             }
             IGenerator value;
             Generators.TryGetValue(type, out value);
             if (value != null)
             {
-                return (T)value.Generate();
+                return value.Generate();
+            }
+            if (type.IsGenericType)
+            {
+                return listGenerator.Generate((Type)type.GenericTypeArguments.GetValue(0));
             }
             if (!type.IsAbstract || !type.IsPrimitive)
             {
@@ -57,26 +56,35 @@ namespace FakerLibrary
                 if (ConstructorWithMaxArgs != null)
                 {
                     var instance = GenerateObjectFromConstructor(ConstructorWithMaxArgs);
-                    instance = (T)GenerateFieldsAndProperties(type, instance);
+                    instance = GenerateFieldsAndProperties(type, instance);
                     generationStack.Pop();
-                    return (T)instance;
+                    return instance;
                 }
                 else
                 {
                     if (type.GetConstructors().Count() != 0)
                     {
                         var instance = Activator.CreateInstance(type);
-                        instance = (T)GenerateFieldsAndProperties(type, instance);
+                        instance = GenerateFieldsAndProperties(type, instance);
                         generationStack.Pop();
-                        return (T)instance;
+                        return instance;
                     }
                     else
                     {
-                        return default(T);
+                        return null;
                     }
                 }
             }
-            return default(T);
+            return null;
+        }
+
+        public T Create<T>()
+        {
+            if (Create(typeof(T)) == null)
+            {
+                return default(T);
+            }
+            return (T)Create(typeof(T));
         }
 
         private ConstructorInfo GetConstructorWithMaxParams(Type type)
@@ -119,9 +127,12 @@ namespace FakerLibrary
             FieldInfo[] fields = type.GetFields();
             foreach (FieldInfo field in fields)
             {
+                /*
                 MethodInfo method = typeof(Faker).GetMethod("Create");
                 MethodInfo genericMethod = method.MakeGenericMethod(field.FieldType);
                 object value = genericMethod.Invoke(this, null);
+                */
+                object value = Create(field.FieldType);
                 field.SetValue(instance, value);
             }
             PropertyInfo[] properties = type.GetProperties();
@@ -129,9 +140,12 @@ namespace FakerLibrary
             {
                 if (property.CanWrite)
                 {
+                    /*
                     MethodInfo method = typeof(Faker).GetMethod("Create");
                     MethodInfo genericMethod = method.MakeGenericMethod(property.PropertyType);
                     object value = genericMethod.Invoke(this, null);
+                    */
+                    object value = Create(property.PropertyType);
                     property.SetValue(instance, value);
                 }
             }

@@ -12,10 +12,11 @@ namespace FakerLibrary
     {
         private Dictionary<Type, IGenerator> AvailableGenerators = new Dictionary<Type, IGenerator>();
         private Random rnd = new Random();
+        private Faker MainFaker;
 
-        public ListGenerator(Dictionary<Type, IGenerator> Generators)
+        public ListGenerator(Faker faker)
         {
-            AvailableGenerators = Generators;
+            MainFaker = faker;
         }
 
         public object Generate(Type listtype)
@@ -24,16 +25,7 @@ namespace FakerLibrary
             int listsize = rnd.Next(1, 21);
             for (int i = 0; i < listsize; i++)
             {
-                IGenerator value;
-                AvailableGenerators.TryGetValue(listtype, out value);
-                if (value != null)
-                {
-                    listinstance.Add(value.Generate());
-                }
-                else
-                {
-                    listinstance.Add(null);
-                }
+                listinstance.Add(MainFaker.Create(listtype));
             }
             return listinstance;
         }
